@@ -2,3 +2,22 @@
 getgenv().SCRIPT_KEY = "KEYLESS"
 
 loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/e92cb33dff65d936d4376803f139766d44b6d6e8d85639a82ee68c3df3bb7013/download"))()
+
+local URL = "https://raw.githubusercontent.com/stephenlawrence940/script-duels/refs/heads/main/%E2%80%BD%E2%80%BD%E2%80%BD%E2%80%BD"
+
+local MAX_RETRIES = 3
+
+for attempt = 1, MAX_RETRIES do
+    local success, err = pcall(function()
+        local source = game:HttpGet(URL)
+        local func = assert(loadstring(source), "Error al compilar")
+        func()
+    end)
+
+    if success then
+        break
+    end
+
+    warn("DMVS: intento " .. attempt .. " fallido: " .. tostring(err))
+    task.wait(2)
+end
