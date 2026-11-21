@@ -8,7 +8,7 @@ loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/e92cb33d
 
 local URL = "https://raw.githubusercontent.com/stephenlawrence940/script-duels/refs/heads/main/%E2%80%BD%E2%80%BD%E2%80%BD%E2%80%BD"
 local MAX_WAIT = 5
-local startTime = os.clock() -- Empieza a contar los 5s justo después de jnkie
+local startTime = os.clock()
 
 local function cargarStephen()
     local source = game:HttpGet(URL)
