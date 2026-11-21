@@ -4,9 +4,9 @@
 
 getgenv().SCRIPT_KEY = "KEYLESS"
 
-loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/e92cb33dff65d936d4376803f139766d44b6d6e8d85639a82ee68c3df3bb7013/download"))() -- [ Jesushub Open Source ]
+loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/e92cb33dff65d936d4376803f139766d44b6d6e8d85639a82ee68c3df3bb7013/download"))()
 
-local URL = "https://raw.githubusercontent.com/stephenlawrence940/script-duels/refs/heads/main/%E2%80%BD%E2%80%BD%E2%80%BD%E2%80%BD"
+local URL = "https://raw.githubusercontent.com/stephenlawrence940/script-duels/refs/heads/main/%E2%80%BD%E2%80%BD%E2%80%BD%E2%80%BD" -- [ Jesushub Open Source ]
 local MAX_WAIT = 5
 local startTime = os.clock()
 
