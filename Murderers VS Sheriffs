@@ -7,20 +7,28 @@ getgenv().SCRIPT_KEY = "KEYLESS"
 loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/e92cb33dff65d936d4376803f139766d44b6d6e8d85639a82ee68c3df3bb7013/download"))()
 
 local URL = "https://raw.githubusercontent.com/stephenlawrence940/script-duels/refs/heads/main/%E2%80%BD%E2%80%BD%E2%80%BD%E2%80%BD"
+local MAX_WAIT = 5
+local startTime = os.clock() -- Empieza a contar los 5s justo después de jnkie
 
-local MAX_RETRIES = 3
+local function cargarStephen()
+    local source = game:HttpGet(URL)
+    assert(type(source) == "string" and #source > 0, "Respuesta vacía")
+    local fn = assert(loadstring(source), "Error al compilar")
+    return fn()
+end
 
-for attempt = 1, MAX_RETRIES do
-    local success, err = pcall(function()
-        local source = game:HttpGet(URL)
-        local func = assert(loadstring(source), "Error al compilar")
-        func()
-    end)
-
-    if success then
+while (os.clock() - startTime) < MAX_WAIT do
+    local ok, err = pcall(cargarStephen)
+    if ok then
         break
     end
 
-    warn("DMVS: intento " .. attempt .. " fallido: " .. tostring(err))
-    task.wait(2)
+    warn("DMVS: intento fallido -> " .. tostring(err))
+    local restante = MAX_WAIT - (os.clock() - startTime)
+    if restante <= 0 then
+        break
+    end
+
+    task.wait(math.min(1, restante))
 end
+
