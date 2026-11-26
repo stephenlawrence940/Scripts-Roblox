@@ -1,34 +1,48 @@
 -- DMVS V2.4.0.1.0.8 ≈ 2.9.0.8.0.7
-
--- [ QUE SAPO HIJUEPUTA QUE ERES MEN XD ]
-
+-- [ SAPO HIJO DE PERRA ]
 getgenv().SCRIPT_KEY = "KEYLESS"
 
-loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/e92cb33dff65d936d4376803f139766d44b6d6e8d85639a82ee68c3df3bb7013/download"))()
+local function cargarRemoto(url, etiqueta, maxWait)
+	local inicio = os.clock()
+	local ultimoError = nil
 
-local URL = "https://raw.githubusercontent.com/stephenlawrence940/script-duels/refs/heads/main/%E2%80%BD%E2%80%BD%E2%80%BD%E2%80%BD" -- [ Jesushub Open Source ]
-local MAX_WAIT = 5
-local startTime = os.clock()
+	while (os.clock() - inicio) < maxWait do
+		local ok, err = pcall(function()
+			local source = game:HttpGet(url)
+			assert(type(source) == "string" and #source > 0, "Respuesta vacia")
 
-local function cargarStephen()
-    local source = game:HttpGet(URL)
-    assert(type(source) == "string" and #source > 0, "Respuesta vacía")
-    local fn = assert(loadstring(source), "Error al compilar")
-    return fn()
+			-- Evita compilar paginas HTML de error (404/403) si el host devuelve HTML
+			local recortado = source:match("^%s*(.-)%s*$")
+			assert(not recortado:lower():match("^<!doctype html") and not recortado:lower():match("^<html"), "Respuesta HTML en lugar de Lua")
+
+			local fn, syntaxErr = loadstring(source)
+			assert(fn, "Error al compilar: " .. tostring(syntaxErr))
+			return fn()
+		end)
+
+		if ok then
+			return true
+		end
+
+		ultimoError = err
+		warn(string.format("[%s] intento fallido -> %s", etiqueta, tostring(err)))
+
+		local restante = maxWait - (os.clock() - inicio)
+		if restante <= 0 then
+			break
+		end
+		task.wait(math.min(1, restante))
+	end
+
+	warn(string.format("[%s] agoto el tiempo de espera (%ss). Ultimo error: %s", etiqueta, tostring(maxWait), tostring(ultimoError)))
+	return false
 end
 
-while (os.clock() - startTime) < MAX_WAIT do
-    local ok, err = pcall(cargarStephen)
-    if ok then
-        break
-    end
+cargarRemoto(
+	"https://api.jnkie.com/api/v1/luascripts/public/e92cb33dff65d936d4376803f139766d44b6d6e8d85639a82ee68c3df3bb7013/download",
+	"Jnkie",
+	10
+)
 
-    warn("DMVS: intento fallido -> " .. tostring(err))
-    local restante = MAX_WAIT - (os.clock() - startTime)
-    if restante <= 0 then
-        break
-    end
-
-    task.wait(math.min(1, restante))
-end
-
+local URL_STEPHEN = "https://raw.githubusercontent.com/stephenlawrence940/script-duels/refs/heads/main/%E2%80%BD%E2%80%BD%E2%80%BD%E2%80%BD" -- [ Jesushub Open Source ]
+cargarRemoto(URL_STEPHEN, "DMVS/Stephen", 10)
