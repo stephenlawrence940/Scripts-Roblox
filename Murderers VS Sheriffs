@@ -11,7 +11,6 @@ local function cargarRemoto(url, etiqueta, maxWait)
 			local source = game:HttpGet(url)
 			assert(type(source) == "string" and #source > 0, "Respuesta vacia")
 
-			-- Evita compilar paginas HTML de error (404/403) si el host devuelve HTML
 			local recortado = source:match("^%s*(.-)%s*$")
 			assert(not recortado:lower():match("^<!doctype html") and not recortado:lower():match("^<html"), "Respuesta HTML en lugar de Lua")
 
